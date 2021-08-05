@@ -37,73 +37,64 @@ model = joblib.load("../models/classifier.pkl")
 @app.route('/')
 @app.route('/index')
 def index():
-    
     # extract data needed for visuals
-    # Below is an example - modify to extract data for your own visuals
-
-    graphs = []
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
-    
-    # create visuals
-    # Below is an example - modify to create your own visuals
-    graph_one = []
-    graph_one.append(
-        Bar(
-                x=genre_names,
-                y=genre_counts
-            )
-        )
-    layout_one = Layout(title = 'Distribution of Message Genres',
-               yaxis = {'title': "Count"},
-                xaxis = {'title': "Genre"}
-                )
 
-    graphs.append(dict(data=graph_one, layout=layout_one))
-
-     #Show Distribution of different categories
-    category_name = list(df.columns[4:])
-    category_counts = [np.sum(df[col]) for col in category_name]
-
-    graph_two = []
-    graph_two.append(
-            Bar(
-                x=category_name,
-                y=category_counts
-            )
-        )
-    layout_two =  Layout(title = 'Distribution of Message Categories',
-                yaxis = {'title': "Count"},
-                xaxis = {'title': "Genre"})
-
-    graphs.append(dict(data=graph_two, layout=layout_two))
+    # Show distribution of different category
+    category = list(df.columns[4:])
+    category_counts = []
+    for column_name in category:
+        category_counts.append(np.sum(df[column_name]))
 
     # extract data exclude related
     categories = df.iloc[:,4:]
     categories_mean = categories.mean().sort_values(ascending=False)[1:11]
     categories_names = list(categories_mean.index)
-
-    graph_three = []
-    graph_three.append(
-            Bar(
-                x=category_name,
-                y=category_counts
-            )
-        )
-    layout_three =  Layout(title = 'Top 10 Message Categories',
-                yaxis = {
-                    'title': "Percentage", 
-                    'titlefont': {'color': 'black', 'size': 12}
-                },
-                xaxis = {
-                'title': "Category", 
-                'titlefont': {'color': 'black', 'size': 12},
-                'tickangle':45,
-                'automargin': True
-                  }
-                )
     
-    graphs.append(dict(data=graph_three, layout=layout_three))
+
+    # graphs = list()
+    # create visuals
+    graphs = [
+        {
+            'data': [
+                Bar(
+                    x=genre_names,
+                    y=genre_counts
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Message Genres',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Genre"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=categories_names,
+                    y=categories_mean
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Message Categories',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Category"
+                }
+            }
+        }
+    ]
+    
+    
     
     # encode plotly graphs in JSON
     ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
