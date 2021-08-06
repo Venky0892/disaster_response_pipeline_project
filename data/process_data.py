@@ -32,10 +32,13 @@ def clean_data(df):
 
     #Convert string to numeric 
     for col in category:
-        category[col] = category[col].str[-1].astype(int)
+        # set each value to be the last character of the string
+        category[col] = category[col].astype(str).str[-1]
+        # convert column from string to numeric
+        category[col] = category[col].astype(int)
 
     #Drop category column & Concat with new categories
-    df.drop(columns = ['categories'], inplace=True, axis=1)
+    df.drop(columns = ['categories'], inplace=True,)
 
     # Drop the duplicates
     df = df.join(category)
