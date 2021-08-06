@@ -35,7 +35,7 @@ def clean_data(df):
         category[col] = category[col].str[-1].astype(int)
 
     #Drop category column & Concat with new categories
-    df.drop(columns = ['categories'], inplace=True)
+    df.drop(columns = ['categories'], inplace=True, axis=1)
 
     # Drop the duplicates
     df = df.join(category)

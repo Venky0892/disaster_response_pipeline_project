@@ -9,6 +9,9 @@
  
 ### Project Motivation
 In this project, I applied my data engineering skills to analyze disaster data from [Figure Eight](https://appen.com/) to build a model for an API that classifies disaster messages.
+Machine Learning pipeline to distinguish messages sent during disaster events and the messages were sent to appropriate disaster relief agency. The project includes a web app where an emergency worker can input a new message and get classification results in several categories. Visualizations for just an overview of the data.
+
+
 ### File Descriptions
 app    
 
